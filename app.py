@@ -5,7 +5,7 @@ from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.image import img_to_array, load_img
 
 app = Flask(__name__)
-model = load_model('your_model.h5')  # Replace with the path to your model
+model = load_model('model.h5')  
 
 class_labels = ['melanoma', 'nevus']
 
@@ -14,7 +14,7 @@ def predict():
     if request.method == 'POST':
         file = request.files['image']
         img = Image.open(file)
-        img = img.resize((150, 150))  # Adjust this to match the input size of your model
+        img = img.resize((150, 150))  
         img = img_to_array(img)
         img = np.expand_dims(img, axis=0)
         img /= 255.0  # Normalize pixel values to the range [0, 1]
