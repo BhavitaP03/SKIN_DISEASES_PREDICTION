@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skin Cancer Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input[type="file"] {
+            margin-top: 10px;
+        }
+        .form-group button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+            display: inline-block;
+            font-size: 16px;
+            margin: 10px 2px;
+            transition: 0.3s;
+        }
+        .form-group button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Skin Cancer Prediction</h1>
+        <form id="upload-form">
+            <div class="form-group">
+                <label for="image">Upload an image:</label>
+                <input type="file" id="image" name="image" accept="image/*">
+            </div>
+            <div class="form-group">
+                <button type="submit">Predict</button>
+            </div>
+        </form>
+        <div class="result">
+            <h2>Result:</h2>
+            <p id="predicted-class">Predicted Class:</p>
+            <p id="class-probabilities">Class Probabilities:</p>
+        </div>
+    </div>
+    <script>
+        const form = document.getElementById('upload-form');
+        const result = document.querySelector('.result');
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const formData = new FormData(form);
+            const response = await fetch('/predict', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                document.getElementById('predicted-class').textContent = `Predicted Class: ${data.predicted_class}`;
+                document.getElementById('class-probabilities').textContent = `Class Probabilities: ${JSON.stringify(data.class_probabilities)}`;
+                result.style.display = 'block';
+            } else {
+                alert('Error: Unable to upload image and make prediction.');
+            }
+        });
+    </script>
+</body>
+</html>
